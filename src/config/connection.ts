@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
 
-mongoose.connect('mongodb://127.0.0.1:27017/networkingsocial');
+mongoose.connect('mongodb://127.0.0.1:27017/networkingsocially');
 
 export default mongoose.connection;

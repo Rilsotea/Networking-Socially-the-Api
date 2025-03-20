@@ -1,0 +1,24 @@
+{
+  "name": "social-networking-attempt",
+  "version": "1.0.0",
+  "description": "A social networking application built with Node.js and Express.",
+  "main": "server.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "npm run build && node dist/server.js",
+    "seed": "npm run build && node  dist/utils/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/mongoose": "^5.11.96",
+    "typescript": "^5.8.2"
+  }
+}
