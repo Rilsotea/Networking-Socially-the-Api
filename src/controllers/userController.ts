@@ -1,4 +1,4 @@
-import { User, Application } from '../models/index.js';
+import { User, Application } from '../models/userModel.js';
 import { Request, Response } from 'express';
 
 
