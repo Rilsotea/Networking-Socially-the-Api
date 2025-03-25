@@ -2,65 +2,70 @@ import thought from '../models/thoughtModel.js';
 import { Request, Response } from 'express';
 
 
-  // Get all users
-  export const getThoughts = async (_req: Request, res: Response) => {
-    try {
-      const users = await thought.find();
-      res.json(users);
-    } catch (err) {
-      res.status(500).json(err);
-    }
+// Get all thoughts
+export const getThoughts = async (_req: Request, res: Response) => {
+  try {
+    const thoughts = await thought.find();
+    res.json(thoughts);
+  } catch (err) {
+    res.status(500).json(err);
   }
+}
 
-  // Get a single user
-  export const getSingleThought = async (req: Request, res: Response) => {
-    try {
-      const user = await thought.findOne({ _id: req.params.userId })
-        .select('-__v');
+// Get a single thought
+export const getSingleThought = async (req: Request, res: Response) => {
+  try {
+    const singleThought = await thought.findOne({ _id: req.params.thoughtId })
+      .select('-__v');
 
-      if (!user) {
-        return res.status(404).json({ message: 'No user with that ID' });
-      }
-
-      res.json(user);
-      return;
-    } catch (err) {
-      res.status(500).json(err);
-      return;
+    if (!singleThought) {
+      return res.status(404).json({ message: 'No thought with that ID' });
     }
-  }
 
-  // create a new thought
-  export const createThought = async (req: Request, res: Response) => {
-    try {
-      const user = await thought.create(req.body);
-      res.json(user);
-    } catch (err) {
-      res.status(500).json(err);
-    }
+    res.json(thought);
+  } catch (err) {
+    res.status(500).json(err);
   }
+}
 
-  // update a user
-  export const updateThought = async (req: Request, res: Response) => {
-    try {
-      const user = await thought.findByIdAndUpdate({ _id: req.params.userId });
-      res.json(user);
-    } catch (err) {
-      res.status(500).json(err);
-    }
+// create a new thought
+export const createThought = async (req: Request, res: Response) => {
+  try {
+    const newThought = await thought.create(req.body);
+    res.status(201).json(newThought);
+  } catch (err) {
+    res.status(500).json(err);
   }
+}
 
-  // Delete a user and associated apps
-  export const deleteThought = async (req: Request, res: Response) => {
-    try {
-      const user = await thought.findOneAndDelete({ _id: req.params.userId });
-  
-      if (!user) {
-        return res.status(404).json({ message: 'No user with that ID' });
-      }
-  
-      res.json({ message: 'User deleted!' });
-    } catch (err) {
-      res.status(500).json({ message: 'An error occurred while deleting the user.' });
+// update a thought
+export const updateThought = async (req: Request, res: Response) => {
+  try {
+    const updatedThought = await thought.findByIdAndUpdate(
+      req.params.thoughtId,
+      req.body,
+      { new: true }
+    );
+    if (!updatedThought) {
+      return res.status(404).json({ message: 'No thought with that ID' });
     }
+    res.json(updatedThought);
+  } catch (err) {
+    res.status(500).json(err);
   }
+}
+
+// Delete a thought
+export const deleteThought = async (req: Request, res: Response) => {
+  try {
+    const deletedThought = await thought.findOneAndDelete({ _id: req.params.thoughtId });
+
+    if (!deletedThought) {
+      return res.status(404).json({ message: 'No thought with that ID' });
+    }
+
+    res.json({ message: 'Thought deleted!' });
+  } catch (err) {
+    res.status(500).json({ message: 'An error occurred while deleting the thought.' });
+  }
+}

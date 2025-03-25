@@ -15,12 +15,10 @@ const thoughtSchema = new Schema<IThought>(
         required: true,
         minlength: 1,
         maxlength: 280,
-        trim: true,
       },
       thoughtAuthor: {
         type: String,
         required: true,
-        trim: true,
       },
     },
     {
