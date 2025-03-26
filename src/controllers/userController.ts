@@ -13,20 +13,19 @@ export const getUsers = async (_req: Request, res: Response) => {
 }
 
 // Get a single user
-export const getSingleUser = async (req: Request, res: Response) => {
+export const getSingleUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findOne({ _id: req.params.userId })
       .select('-__v');
 
     if (!user) {
-      return res.status(404).json({ message: 'No user with that ID' });
+      res.status(404).json({ message: 'No user with that ID' });
+      return;
     }
 
     res.json(user);
-    return;
   } catch (err) {
-    res.status(500).json(err);
-    return;
+    res.status(500).json({ error: err.message });
   }
 }
 
@@ -52,12 +51,13 @@ export const updateUser = async (req: Request, res: Response) => {
 
 
 // Delete a user and associated apps
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findOneAndDelete({ _id: req.params.userId });
 
     if (!user) {
-      return res.status(404).json({ message: 'No user with that ID' });
+      res.status(404).json({ message: 'No user with that ID' });
+      return;
     }
 
     res.json({ message: 'User deleted!' });

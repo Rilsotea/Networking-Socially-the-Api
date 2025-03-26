@@ -2,6 +2,11 @@ import { Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { Thought, User } from '../models';
 
+interface Params {
+    thoughtId: string;
+    reactionId: string;
+}
+
 
 export const totalReactions = async () => {
     const numberOfReactions = await Thought.aggregate()
@@ -79,23 +84,10 @@ export const createThought = async (req: Request, res: Response) => {
 
 export const deleteThought = async (req: Request, res: Response) => {
     try {
-        
         const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
         if (!thought) {
             return res.status(404).json({ message: 'No such thought exists' });
-        }
-
-        
-        const user = await User.findOneAndUpdate(
-            { thoughts: req.params.thoughtId },
-            { $pull: { thoughts: req.params.thoughtId } },
-            { new: true }
-        );
-
-        
-        if (!user) {
-            console.warn('Thought deleted, but no users found');
         }
 
         return res.json({ message: 'Thought successfully deleted' });
@@ -108,10 +100,8 @@ export const deleteThought = async (req: Request, res: Response) => {
 export const addReaction = async (req: Request, res: Response) => {
     console.log('You are adding a reaction');
     console.log(req.body);
-    
+
     const { text, userId } = req.body;
-
-
     if (!text || !userId) {
         return res.status(400).json({ message: "Missing required fields (text, userId)" });
     }
@@ -119,14 +109,12 @@ export const addReaction = async (req: Request, res: Response) => {
     try {
         const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $addToSet: { reactions: req.body } },
+            { $addToSet: { reactions: { text, userId } } },
             { runValidators: true, new: true }
         );
-
         if (!thought) {
             return res.status(404).json({ message: "Thought not found" });
         }
-
         return res.json(thought);
     } catch (err) {
         console.error(err);
@@ -134,24 +122,16 @@ export const addReaction = async (req: Request, res: Response) => {
     }
 }
 
-export const removeReaction = async (req: Request, res: Response) => {
+export const removeReaction = async (req: Request<Params>, res: Response) => {
     try {
         const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $pull: { reactions: { reactionId: req.params.reactionId } } },
             { runValidators: true, new: true }
         );
-
         if (!thought) {
             return res.status(404).json({ message: 'No thought found with that ID' });
         }
-
-
-        const reactionExists = thought.reactions?.some((reaction: any) => reaction.reactionId?.toString() === req.params.reactionId);
-        if (reactionExists) {
-            return res.status(404).json({ message: 'Reaction not found' });
-        }
-
         return res.json(thought);
     } catch (err) {
         console.error(err);
