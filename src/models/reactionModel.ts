@@ -6,7 +6,7 @@ interface IReaction extends Document {
     reactionBody: string,
     username: string,
     createdAt: Schema.Types.Date
-   }
+}
 
 
 const reactionSchema = new Schema<IReaction>(
@@ -35,7 +35,7 @@ const reactionSchema = new Schema<IReaction>(
             getters: true
         },
         timestamps: true,
-       
+
     }
 );
 

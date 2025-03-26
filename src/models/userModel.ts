@@ -18,11 +18,11 @@ const userSchema = new Schema<IUser>(
         },
         email: {
             type: String,
-            required: true, 
+            required: true,
             unique: true,
             match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
         },
-        
+
         thoughts: [
             {
                 type: Schema.Types.ObjectId,
@@ -31,7 +31,7 @@ const userSchema = new Schema<IUser>(
         ],
         friends: [
             {
-                type : Schema.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: 'User',
             },
         ],
