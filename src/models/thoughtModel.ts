@@ -1,5 +1,5 @@
 import { Schema, model, type Document } from 'mongoose';
-import reactionSchema from './Reaction.js';
+import reactionSchema from './reactionModel.js';
 
 
 
