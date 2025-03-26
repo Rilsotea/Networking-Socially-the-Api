@@ -1,33 +1,43 @@
-import { Schema, Document, model, ObjectId } from 'mongoose';
+import { Schema, model, type Document } from 'mongoose';
+import reactionSchema from './Reaction.js';
+
+
 
 interface IThought extends Document {
-    useerId: ObjectId;
-    thoughtText: string;
-    thoughtAuthor: string;
-    createdAt: Date;
-    updatedAt: Date;
+    thoughtText: string,
+    username: string,
+    createdAt: Schema.Types.Date,
+    reactions: [typeof reactionSchema]
 }
 
 const thoughtSchema = new Schema<IThought>(
     {
-      thoughtText: {
-        type: String,
-        required: true,
-        minlength: 1,
-        maxlength: 280,
-      },
-      thoughtAuthor: {
-        type: String,
-        required: true,
-      },
+        thoughtText: {
+            type: String,
+            required: true,
+            minlength: 1,
+            maxlength: 280,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            get: (timestamp: Date) => timestamp.toISOString(),
+        },
+        username: {
+            type: String,
+            required: true,
+        },
+        reactions: [reactionSchema]
     },
     {
-      timestamps: true,
-      toJSON: { getters: true },
-      toObject: { getters: true },
+        toJSON: {
+            getters: true,
+        },
+        timestamps: true,
+        id: false
     }
-  );
+);
 
-const Thought = model<IThought>('Thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 
 export default Thought;
