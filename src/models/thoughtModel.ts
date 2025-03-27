@@ -10,33 +10,23 @@ interface IThought extends Document {
     reactions: [typeof reactionSchema]
 }
 
-const thoughtSchema = new Schema<IThought>(
-    {
-        thoughtText: {
-            type: String,
-            required: true,
-            minlength: 1,
-            maxlength: 280,
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-            get: (timestamp: Date) => timestamp.toISOString(),
-        },
-        username: {
-            type: String,
-            required: true,
-        },
-        reactions: [reactionSchema]
+const thoughtSchema = new Schema<IThought>({
+    thoughtText: {
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 280,
     },
-    {
-        toJSON: {
-            getters: true,
-        },
-        timestamps: true,
-        id: false
-    }
-);
+    username: {
+        type: String,
+        required: true,
+    },
+    reactions: [reactionSchema],
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
 
 const Thought = model('Thought', thoughtSchema);
 

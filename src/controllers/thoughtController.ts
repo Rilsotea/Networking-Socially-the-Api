@@ -100,16 +100,15 @@ export const deleteThought = async (req: Request, res: Response) => {
 export const addReaction = async (req: Request, res: Response) => {
     console.log('You are adding a reaction');
     console.log(req.body);
-
     const { text, userId } = req.body;
     if (!text || !userId) {
         return res.status(400).json({ message: "Missing required fields (text, userId)" });
     }
-
     try {
+        const reaction = { text, userId };
         const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $addToSet: { reactions: { text, userId } } },
+            { $addToSet: { reactions: reaction } },
             { runValidators: true, new: true }
         );
         if (!thought) {
