@@ -10,16 +10,21 @@ import {
   removeReaction,
 } from '../../controllers/thoughtController.js';
 
-// /api/thoughts
-router.route('/').get(getAllThoughts).post(createThought);
+router.route('/')
+    .get(getAllThoughts)        // GET /api/thoughts
+    .post(createThought);       // POST /api/thoughts
 
-// /api/thoughts/:thoughtId
-router.route('/:thoughtId').get(getThoughtById).delete(deleteThought);
+// Route to get, delete a single thought by ID
+router.route('/:thoughtId')
+    .get(getThoughtById)        // GET /api/thoughts/:thoughtId
+    .delete(deleteThought);      // DELETE /api/thoughts/:thoughtId
 
-// /api/thoughts/:thoughtId/reactions
-router.route('/:thoughtId/reactions').post(addReaction);
+// Route to add and remove reactions to a thought by ID
+router.route('/:thoughtId/reactions')
+    .post(addReaction);          // POST /api/thoughts/:thoughtId/reactions
 
-// /api/thoughts/:thoughtId/reactions/:reactionId 
-router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
+// Route to remove a specific reaction from a thought
+router.route('/:thoughtId/reactions/:reactionId')
+    .delete(removeReaction);     // DELETE /api/thoughts/:thoughtId/reactions/:reactionId
 
 export { router as thoughtRouter };

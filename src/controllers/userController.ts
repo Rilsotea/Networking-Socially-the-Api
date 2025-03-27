@@ -30,22 +30,27 @@ export const getSingleUser = async (req: Request, res: Response): Promise<void> 
 }
 
 // create a new user
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req, res) => {
+  const { username, email } = req.body;
   try {
-    const user = await User.create(req.body);
-    res.json(user);
-  } catch (err) {
-    res.status(500).json(err);
+      const newUser = new User({ username, email });
+      await newUser.save();
+      res.status(201).json(newUser);
+  } catch (error) {
+      res.status(400).json({ message: 'Error creating user', error });
   }
-}
+};
 
 // update a user
 export const updateUser = async (req: Request, res: Response) => {
   try {
-    const user = await User.findByIdAndUpdate({ _id: req.params.userId });
+    const user = await User.findByIdAndUpdate(req.params.userId, req.body, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: 'No user with that ID' });
+    }
     res.json(user);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: 'An error occurred while updating the user.', error: err.message });
   }
 }
 
