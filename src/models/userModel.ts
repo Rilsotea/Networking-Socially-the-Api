@@ -2,7 +2,7 @@ import { Schema, model, type Document } from 'mongoose';
 
 
 interface IUser extends Document {
-    name: string,
+    username: string,
     email: string,
     thoughts: Schema.Types.ObjectId[],
     friends: Schema.Types.ObjectId[]
@@ -10,7 +10,7 @@ interface IUser extends Document {
 
 const userSchema = new Schema<IUser>(
     {
-        name: {
+        username: {
             type: String,
             required: true,
             unique: true,
