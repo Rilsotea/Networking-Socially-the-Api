@@ -2,6 +2,7 @@ import express from 'express';
 import db from './config/connection.js';
 import routes from './routes/index.js';
 
+
 db.once('open', () => {
   console.log('Connected to database');
 });

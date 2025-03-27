@@ -27,4 +27,4 @@ router.route('/:thoughtId/reactions')
 router.route('/:thoughtId/reactions/:reactionId')
     .delete(removeReaction);     // DELETE /api/thoughts/:thoughtId/reactions/:reactionId
 
-export { router as thoughtRouter };
+export default router;

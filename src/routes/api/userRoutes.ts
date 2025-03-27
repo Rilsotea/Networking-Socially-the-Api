@@ -1,4 +1,6 @@
-import express from 'express';
+import { Router } from 'express';
+const router = Router();
+
 import {
     getUsers,
     getSingleUser,
@@ -6,8 +8,6 @@ import {
     updateUser,
     deleteUser
 } from '../../controllers/userController.js';
-
-const router = express.Router();
 
 // Route to get all users
 router.route('/')
