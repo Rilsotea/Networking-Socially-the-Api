@@ -32,6 +32,11 @@ export const getSingleUser = async (req: Request, res: Response): Promise<void> 
 // create a new user
 export const createUser = async (req, res) => {
   const { username, email } = req.body;
+
+  if (!username || !email) {
+      return res.status(400).json({ message: 'Username and email are required.' });
+  }
+
   try {
       const newUser = new User({ username, email });
       await newUser.save();
