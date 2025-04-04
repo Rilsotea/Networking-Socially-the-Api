@@ -51,9 +51,7 @@ export const getThoughtById = async (req: Request, res: Response) => {
     try {
         const foundThought = await Thought.findById(thoughtId);
         if (foundThought) {
-            res.json({
-                thought: await thought(thoughtId)
-            });
+            res.json(foundThought);
         } else {
             res.status(404).json({
                 message: 'Thought not found'
@@ -69,6 +67,7 @@ export const getThoughtById = async (req: Request, res: Response) => {
 export const createThought = async (req: Request, res: Response) => {
     try {
         const { thoughtText, username, userId } = req.body;
+        console.log(req.body);
         // Check if the user exists
         const user = await User.findById(userId);
         if (!user) {
@@ -106,12 +105,12 @@ export const deleteThought = async (req: Request, res: Response) => {
 export const addReaction = async (req: Request, res: Response) => {
     console.log('You are adding a reaction');
     console.log(req.body);
-    const { text, userId } = req.body;
-    if (!text || !userId) {
+    const { reactionBody, username} = req.body;
+    if (!reactionBody|| !username) {
         return res.status(400).json({ message: "Missing required fields (text, userId)" });
     }
     try {
-        const reaction = { text, userId };
+        const reaction = { reactionBody, username };
         const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $addToSet: { reactions: reaction } },
