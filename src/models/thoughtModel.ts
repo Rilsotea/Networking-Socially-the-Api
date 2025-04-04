@@ -1,13 +1,13 @@
-import { Schema, model, type Document } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import reactionSchema from './reactionModel.js';
 
 
 
 interface IThought extends Document {
-    thoughtText: string,
-    username: string,
-    createdAt: Schema.Types.Date,
-    reactions: [typeof reactionSchema]
+    thoughtText: string;
+    username: string;
+    createdAt: Date;  
+    reactions: typeof reactionSchema[];
 }
 
 const thoughtSchema = new Schema<IThought>({
@@ -17,15 +17,21 @@ const thoughtSchema = new Schema<IThought>({
         minlength: 1,
         maxlength: 280,
     },
-    username: {
-        type: String,
-        required: true,
-    },
-    reactions: [reactionSchema],
     createdAt: {
         type: Date,
         default: Date.now,
     },
+    username: {
+        type: String,
+        required: true,
+    },
+    reactions: [reactionSchema]
+}, {
+    toJSON: {
+        getters: true,
+    },
+    timestamps: true,
+    id: false
 });
 
 const Thought = model('Thought', thoughtSchema);

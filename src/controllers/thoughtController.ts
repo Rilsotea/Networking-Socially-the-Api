@@ -69,16 +69,22 @@ export const getThoughtById = async (req: Request, res: Response) => {
 export const createThought = async (req: Request, res: Response) => {
     try {
         const { thoughtText, username, userId } = req.body;
+        // Check if the user exists
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        // Add the thought to the user's thoughts array
         const thought = await Thought.create({ thoughtText, username });
         await User.findOneAndUpdate(
             { _id: userId },
             { $push: { thoughts: thought._id } },
             { new: true }
         );
-        res.json(thought);
+        return res.json(thought);
     } catch (err) {
         console.error(err)
-        res.status(500).json(err);
+        return res.status(500).json(err);
     }
 }
 

@@ -27,7 +27,7 @@ const reactionSchema = new Schema<IReaction>(
         createdAt: {
             type: Date,
             default: Date.now,
-            get: (timestamp: Date) => timestamp.toISOString(),
+            get: (timestamp: Date): string => timestamp.toISOString(),
         }
     },
     {
@@ -35,7 +35,6 @@ const reactionSchema = new Schema<IReaction>(
             getters: true
         },
         timestamps: true,
-
     }
 );
 
